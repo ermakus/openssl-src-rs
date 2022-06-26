@@ -1,9 +1,11 @@
 extern crate cc;
+extern crate remove_dir_all;
 
 use std::env;
 use std::fs;
 use std::path::{Path, PathBuf};
 use std::process::Command;
+use remove_dir_all::remove_dir_all;
 
 pub fn source_dir() -> PathBuf {
     Path::new(env!("CARGO_MANIFEST_DIR")).join("openssl")
@@ -120,10 +122,10 @@ impl Build {
         let install_dir = out_dir.join("install");
 
         if build_dir.exists() {
-            fs::remove_dir_all(&build_dir).unwrap();
+            remove_dir_all(&build_dir).unwrap();
         }
         if install_dir.exists() {
-            fs::remove_dir_all(&install_dir).unwrap();
+            remove_dir_all(&install_dir).unwrap();
         }
 
         let inner_dir = build_dir.join("src");
@@ -472,7 +474,7 @@ impl Build {
             vec!["ssl".to_string(), "crypto".to_string()]
         };
 
-        fs::remove_dir_all(&inner_dir).unwrap();
+        remove_dir_all(&inner_dir).unwrap();
 
         Artifacts {
             lib_dir: install_dir.join("lib"),
